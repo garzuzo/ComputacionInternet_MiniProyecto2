@@ -3,6 +3,7 @@ package co.edu.icesi.mio.logic;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -40,21 +41,18 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 	}
 
 	@Transactional
-	public Tmio1Conductore findByName(String name, EntityManager em) {
-
-		return null;
+	public List<Tmio1Conductore> findByName(String name, EntityManager em) {
+		return conductorDAO.findByName(em, name);
 	}
 
 	@Transactional
-	public void findByLastname(String lastname, EntityManager em) {
-		// TODO Auto-generated method stub
-		
+	public List<Tmio1Conductore> findByLastname(String lastname, EntityManager em) {
+		return conductorDAO.findByLastName(em, lastname);
 	}
 
 	@Transactional
-	public void findByCedula(String cedula, EntityManager em) {
-		// TODO Auto-generated method stub
-		
+	public Tmio1Conductore findByCedula(String cedula, EntityManager em) {
+		return conductorDAO.findByCedula(em, cedula);
 	}
 
 	
