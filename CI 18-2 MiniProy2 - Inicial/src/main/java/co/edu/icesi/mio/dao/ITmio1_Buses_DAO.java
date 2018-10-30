@@ -20,4 +20,5 @@ public interface ITmio1_Buses_DAO {
 	public List<Tmio1Bus> findByModel(EntityManager em, BigDecimal model);
 	public List<Tmio1Bus> findByType(EntityManager em, String type);
 	public List<Tmio1Bus> findByCapacity(EntityManager em, BigDecimal capacity);
+	public List<Tmio1Bus> busesThatAreFree(EntityManager em);
 }

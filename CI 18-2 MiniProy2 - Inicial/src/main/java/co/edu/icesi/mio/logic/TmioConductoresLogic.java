@@ -31,15 +31,13 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 	public void createConductor(Tmio1Conductore conductor) {
 		//hacer validaciones sobre conductor
 		//NO ESTOY SEGURA DE PASAR EL ENTITYMANAGER COMO PARAMETRO O DEBE CREARSE.
-		
-		if(conductor != null) {
-			if(validacionCedula(conductor.getCedula()) && 
-					validacionNombre(conductor.getNombre()) &&
-						validacionApellido(conductor.getApellidos()) &&
-							validacionFechaNacimiento(conductor.getFechaNacimiento()) &&
-								validacionFechaContratacion(conductor.getFechaContratacion())) {
+		if(conductor != null && findByCedula(conductor.getCedula())==null &&
+			validacionCedula(conductor.getCedula()) && 
+				validacionNombre(conductor.getNombre()) &&
+					validacionApellido(conductor.getApellidos()) &&
+						validacionFechaNacimiento(conductor.getFechaNacimiento()) &&
+							validacionFechaContratacion(conductor.getFechaContratacion())) {
 				conductorDAO.save(em,conductor);
-			}
 		}else {
 			//LANZAR UNA EXCEPCION
 		}	
@@ -47,14 +45,15 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 	
 	@Override
 	public void updateConductor(Tmio1Conductore conductor) {
-		if(conductor != null) {
-			if(validacionCedula(conductor.getCedula()) && 
-					validacionNombre(conductor.getNombre()) &&
-						validacionApellido(conductor.getApellidos()) &&
-							validacionFechaNacimiento(conductor.getFechaNacimiento()) &&
-								validacionFechaContratacion(conductor.getFechaContratacion())) {
+		
+		if(conductor != null && findByCedula(conductor.getCedula())!=null &&
+			validacionCedula(conductor.getCedula()) && 
+				validacionNombre(conductor.getNombre()) &&
+					validacionApellido(conductor.getApellidos()) &&
+						validacionFechaNacimiento(conductor.getFechaNacimiento()) &&
+							validacionFechaContratacion(conductor.getFechaContratacion())) {
 				conductorDAO.update(em, conductor);
-			}
+
 		}else {
 			//LANZAR UNA EXCEPCION
 		}
@@ -62,7 +61,7 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 
 	@Transactional
 	public void deleteConductor(Tmio1Conductore conductor) {
-		if(conductor!=null)
+		if(conductor!=null && findByCedula(conductor.getCedula())!=null)
 		conductorDAO.delete(em, conductor);
 	}
 

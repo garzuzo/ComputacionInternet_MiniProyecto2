@@ -1,6 +1,8 @@
 package co.edu.icesi.mio.dao;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -33,6 +35,22 @@ public class Tmio1_Buses_DAO implements ITmio1_Buses_DAO{
 		String jpql = "Select b from Tmio1Bus b where b.capacidad="+ capacity;
 		return 	em.createQuery(jpql).getResultList();
 	}
+	
+	@Override
+	public List<Tmio1Bus> busesThatAreFree(EntityManager em) {
+		Calendar gc= new GregorianCalendar().getInstance();
+		String actual= ("'" +gc.get(GregorianCalendar.YEAR)+ "-" + gc.get(GregorianCalendar.MONTH)+ "-" + 
+				gc.get(GregorianCalendar.DAY_OF_MONTH)+ "'");
+		String jpql= " Select c from Tmio1Bus c, Tmio1Servicio s"
+				     + " WHERE c.id= s.tmio1Bus.id AND s.id.fechaFin>=" + actual;
+		List<Tmio1Bus> busessWithServices= em.createQuery(jpql).getResultList();
+		
+		List<Tmio1Bus> buses = findAll(em);
+		if(busessWithServices.size() >0)
+		buses.removeAll(busessWithServices);
+		return 	buses;
+	}
+
 
 	//normales
 	@Override
