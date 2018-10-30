@@ -77,7 +77,7 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 	@Transactional
 	public List<Tmio1Conductore> findByLastname(String lastname) {
 		List<Tmio1Conductore> conductores= null;
-		if(validacionNombre(lastname))
+		if(validacionApellido(lastname))
 			conductores= conductorDAO.findByLastName(em, lastname);
 		return conductores; 
 	}
@@ -85,7 +85,7 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 	@Transactional
 	public Tmio1Conductore findByCedula(String cedula) {
 		Tmio1Conductore conductor= null;
-		if(validacionNombre(cedula))
+		if(validacionCedula(cedula))
 			conductor= conductorDAO.findByCedula(em, cedula);
 		return conductor; 
 	}
