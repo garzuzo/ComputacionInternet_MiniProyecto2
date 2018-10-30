@@ -38,17 +38,13 @@ public class Tmio1_Buses_DAO implements ITmio1_Buses_DAO{
 	
 	@Override
 	public List<Tmio1Bus> busesThatAreFree(EntityManager em) {
-		Calendar gc= new GregorianCalendar().getInstance();
-		String actual= ("'" +gc.get(GregorianCalendar.YEAR)+ "-" + gc.get(GregorianCalendar.MONTH)+ "-" + 
-				gc.get(GregorianCalendar.DAY_OF_MONTH)+ "'");
-		String jpql= " Select c from Tmio1Bus c, Tmio1Servicio s"
-				     + " WHERE c.id= s.tmio1Bus.id AND s.id.fechaFin>=" + actual;
-		List<Tmio1Bus> busessWithServices= em.createQuery(jpql).getResultList();
-		
-		List<Tmio1Bus> buses = findAll(em);
-		if(busessWithServices.size() >0)
-		buses.removeAll(busessWithServices);
-		return 	buses;
+		// fecha Actual
+		Calendar fechaActual = GregorianCalendar.getInstance();
+		String fa = "\'" + fechaActual.get(Calendar.YEAR) + "-" + fechaActual.get(Calendar.MONTH) + "-"
+				+ fechaActual.get(Calendar.DAY_OF_MONTH) + "\'";
+		String jpql = "SELECT C FROM Tmio1Bus C WHERE C NOT IN (SELECT C1 FROM Tmio1Servicio S, Tmio1Bus C1 WHERE S.tmio1Bus.id=C1.id AND S.id.fechaFin>="
+				+ fa + ")";
+		return em.createQuery(jpql).getResultList();
 	}
 
 
