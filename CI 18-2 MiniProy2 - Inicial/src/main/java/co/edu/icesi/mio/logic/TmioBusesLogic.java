@@ -21,38 +21,42 @@ public class TmioBusesLogic implements ITmioBusesLogic {
 	@Override
 	public void add(Tmio1Bus bus) {
 
-		if (placaMESix(bus) && marcaMEThree(bus) && modeloNumbersEFour(bus) && tipoPAT(bus) && capacidadMZero(bus))
+		if (bus != null && buses.findById(em, bus.getId()) == null && placaMESix(bus) && marcaMEThree(bus)
+				&& modeloNumbersEFour(bus.getModelo()) && tipoPAT(bus.getTipo()) && capacidadMZero(bus.getCapacidad()))
 			buses.save(em, bus);
 	}
 
 	@Override
 	public void update(Tmio1Bus bus) {
-		if (placaMESix(bus) && marcaMEThree(bus) && modeloNumbersEFour(bus) && tipoPAT(bus) && capacidadMZero(bus))
+		if (bus != null && buses.findById(em, bus.getId()) != null && placaMESix(bus) && marcaMEThree(bus)
+				&& modeloNumbersEFour(bus.getModelo()) && tipoPAT(bus.getTipo()) && capacidadMZero(bus.getCapacidad()))
 			buses.update(em, bus);
 	}
 
 	@Override
 	public void delete(Tmio1Bus bus) {
 
-		buses.delete(em, bus);
+		if (bus != null && buses.findById(em, bus.getId()) != null)
+			buses.delete(em, bus);
 	}
 
 	@Override
 	public void findByModelo(BigDecimal m) {
 
-		buses.findByModel(em, m);
+		if (modeloNumbersEFour(m))
+			buses.findByModel(em, m);
 	}
 
 	@Override
 	public void findByTipo(String t) {
-
-		buses.findByType(em, t);
+		if (tipoPAT(t))
+			buses.findByType(em, t);
 	}
 
 	@Override
 	public void findByCapacidad(BigDecimal c) {
-
-		buses.findByCapacity(em, c);
+		if (capacidadMZero(c))
+			buses.findByCapacity(em, c);
 	}
 
 	/**
@@ -61,7 +65,7 @@ public class TmioBusesLogic implements ITmioBusesLogic {
 
 	// la placa esté definida y tenga seis caracteres
 	public boolean placaMESix(Tmio1Bus bus) {
-		return bus.getPlaca().length() >= 6;
+		return bus.getPlaca().length() == 6;
 	}
 
 	// la marca esté definida y tenga al menos tres caracteres
@@ -70,18 +74,18 @@ public class TmioBusesLogic implements ITmioBusesLogic {
 	}
 
 	// el modelo sea numérico de cuatro dígitos
-	public boolean modeloNumbersEFour(Tmio1Bus bus) {
-		return bus.getModelo().compareTo(new BigDecimal("10000")) < 0;
+	public boolean modeloNumbersEFour(BigDecimal bus) {
+		return bus.compareTo(new BigDecimal("10000")) < 0;
 	}
 
 	// el tipo sea P, A, o T
-	public boolean tipoPAT(Tmio1Bus bus) {
-		return bus.getTipo().matches("P|A|T");
+	public boolean tipoPAT(String bus) {
+		return bus.matches("P|A|T");
 	}
 
 	// la capacidad sea numérica mayor a cero
-	public boolean capacidadMZero(Tmio1Bus bus) {
-		return bus.getCapacidad().compareTo(BigDecimal.ZERO) > 0;
+	public boolean capacidadMZero(BigDecimal bus) {
+		return bus.compareTo(BigDecimal.ZERO) > 0;
 	}
 
 }

@@ -21,7 +21,7 @@ public class TmioRutasLogic implements ITmioRutasLogic {
 	@Override
 	public void add(Tmio1Ruta ruta) {
 	
-		if (validacionNumeroRuta(ruta) && validacionDiaInicio(ruta) && validacionDiaFin(ruta)
+		if (ruta!=null && rutas.findById(em, ruta.getId())==null && validacionNumeroRuta(ruta) && validacionDiaInicio(ruta) && validacionDiaFin(ruta)
 				&& validacionDiaInicioMenorFin(ruta) && validacionHoraFin(ruta) && validacionHoraInicio(ruta)
 				&& validacionHoraInicioMenorFin(ruta) && validacionActiva(ruta))
 			rutas.save(em, ruta);
@@ -29,7 +29,7 @@ public class TmioRutasLogic implements ITmioRutasLogic {
 
 	@Override
 	public void update(Tmio1Ruta ruta) {
-		if (validacionNumeroRuta(ruta) && validacionDiaInicio(ruta) && validacionDiaFin(ruta)
+		if (ruta!=null && rutas.findById(em, ruta.getId())!=null &&validacionNumeroRuta(ruta) && validacionDiaInicio(ruta) && validacionDiaFin(ruta)
 				&& validacionDiaInicioMenorFin(ruta) && validacionHoraFin(ruta) && validacionHoraInicio(ruta)
 				&& validacionHoraInicioMenorFin(ruta) && validacionActiva(ruta))
 		rutas.update(em, ruta);
@@ -37,13 +37,14 @@ public class TmioRutasLogic implements ITmioRutasLogic {
 
 	@Override
 	public void delete(Tmio1Ruta ruta) {
-
+if(ruta!=null && rutas.findById(em, ruta.getId())!=null )
 		rutas.delete(em, ruta);
 	}
 
 	@Override
 	public void findByRangoDias(BigDecimal di, BigDecimal df) {
 		// TODO Auto-generated method stub
+		if(validacionDiaInicio(di) && validacionDiaFin(df)&&validacionDiaInicioMenorFin(di, df))
 		rutas.findByRangeOfDays(em, di, df);
 	}
 
@@ -55,6 +56,19 @@ public class TmioRutasLogic implements ITmioRutasLogic {
 		return ruta.getNumero().length() == 3;
 	}
 
+	public boolean validacionDiaInicio(BigDecimal di) {
+		return di.compareTo(BigDecimal.ONE) >= 0
+				&& di.compareTo(new BigDecimal("7")) <= 0;
+	}
+
+	public boolean validacionDiaFin( BigDecimal df) {
+		return df.compareTo(BigDecimal.ONE) >= 0 && df.compareTo(new BigDecimal("7")) <= 0;
+	}
+
+	public boolean validacionDiaInicioMenorFin(BigDecimal di, BigDecimal df) {
+		return di.compareTo(df) <= 0;
+	}
+	
 	public boolean validacionDiaInicio(Tmio1Ruta ruta) {
 		return ruta.getDiaInicio().compareTo(BigDecimal.ONE) >= 0
 				&& ruta.getDiaInicio().compareTo(new BigDecimal("7")) <= 0;
