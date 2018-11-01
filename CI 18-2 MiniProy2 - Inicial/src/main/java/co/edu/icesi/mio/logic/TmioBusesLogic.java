@@ -59,6 +59,10 @@ public class TmioBusesLogic implements ITmioBusesLogic {
 			buses.findByCapacity(em, c);
 	}
 
+	@Override
+	public Tmio1Bus findById(int id) {
+		return buses.findById(em, id);
+	}
 	/**
 	 * VALIDACIONES
 	 */

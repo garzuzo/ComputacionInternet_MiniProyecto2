@@ -12,6 +12,7 @@ public interface ITmioRutasLogic {
 
 	public void delete(Tmio1Ruta bus);
 
-	public void findByRangoDias(BigDecimal di,BigDecimal df) ;
+	public void findByRangoDias(BigDecimal di, BigDecimal df);
 
+	public Tmio1Ruta findById(int id);
 }
