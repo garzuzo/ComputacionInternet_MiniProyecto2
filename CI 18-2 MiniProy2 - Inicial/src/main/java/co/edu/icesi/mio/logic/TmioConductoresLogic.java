@@ -29,8 +29,7 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 	
 	@Transactional
 	public void createConductor(Tmio1Conductore conductor) {
-		//hacer validaciones sobre conductor
-		//NO ESTOY SEGURA DE PASAR EL ENTITYMANAGER COMO PARAMETRO O DEBE CREARSE.
+
 		if(conductor != null && findByCedula(conductor.getCedula())==null &&
 			validacionCedula(conductor.getCedula()) && 
 				validacionNombre(conductor.getNombre()) &&
