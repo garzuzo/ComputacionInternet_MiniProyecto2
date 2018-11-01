@@ -1,7 +1,9 @@
 package co.edu.icesi.mio.logic;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -71,6 +73,14 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 	public void deleteServicio(Tmio1Servicio servicio) {
 		if (servicio != null && getServicio(servicio.getId()) != null)
 			servicioDAO.delete(em, servicio);
+	}
+	
+	@Transactional
+	public List<Tmio1Servicio> findByRangeOfDates(Calendar d1, Calendar d2) {
+		List<Tmio1Servicio> servicios=null;
+		if(d1!=null && d2!=null)
+			servicios= servicioDAO.findByRangeOfDates(em,d1, d2);
+		return servicios;
 	}
 
 	/**
