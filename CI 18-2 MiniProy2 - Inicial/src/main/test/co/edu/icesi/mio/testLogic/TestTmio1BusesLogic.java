@@ -1,8 +1,11 @@
 package co.edu.icesi.mio.testLogic;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,10 +24,12 @@ public class TestTmio1BusesLogic {
 	@Autowired
 	private ITmioBusesLogic buses;
 
-	private void setupEscenarioCamposValidos() {
-		Tmio1Bus b = new Tmio1Bus();
+	private Tmio1Bus b;
 
-		b.setId(2);
+	private void setupEscenarioCamposValidos() {
+		b = new Tmio1Bus();
+
+		b.setId(1);
 		b.setCapacidad(new BigDecimal(10));
 		b.setMarca("1234");
 		b.setModelo(new BigDecimal(4943));
@@ -35,10 +40,9 @@ public class TestTmio1BusesLogic {
 	}
 
 	private void setupEscenarioCamposInvalidos() {
+		b = new Tmio1Bus();
 
-		Tmio1Bus b = new Tmio1Bus();
-
-		b.setId(3);
+		b.setId(2);
 		b.setCapacidad(new BigDecimal(0));
 		b.setMarca("123");
 		b.setModelo(new BigDecimal(494));
@@ -53,10 +57,10 @@ public class TestTmio1BusesLogic {
 
 		Tmio1Bus b1 = new Tmio1Bus();
 
-		b1.setId(2);
+		b1.setId(1);
 		b1.setCapacidad(new BigDecimal(10));
 		b1.setMarca("1234");
-		b1.setModelo(new BigDecimal(4943));
+		b1.setModelo(new BigDecimal(1234));
 		b1.setPlaca("123456");
 		b1.setTipo("P");
 		buses.add(b1);
@@ -76,26 +80,30 @@ public class TestTmio1BusesLogic {
 		b3.setId(3);
 		b3.setCapacidad(new BigDecimal(10));
 		b3.setMarca("1234");
-		b3.setModelo(new BigDecimal(4943));
+		b3.setModelo(new BigDecimal(1234));
 		b3.setPlaca("123456");
 		b3.setTipo("P");
 		buses.add(b3);
 	}
 
 	private void setupEscenarioEliminarDatos() {
-		//in process
-		Tmio1Bus b1=buses.findById(1);
-		Tmio1Bus b2=buses.findById(2);
-		Tmio1Bus b3=buses.findById(3);
+		// in process
+		Tmio1Bus b1 = buses.findById(1);
+		Tmio1Bus b2 = buses.findById(2);
+		Tmio1Bus b3 = buses.findById(3);
 		buses.delete(b1);
 		buses.delete(b2);
 		buses.delete(b3);
 	}
+
 	@Test
 	public void addCamposValidosTest() {
 		assertNotNull(buses);
 
 		setupEscenarioCamposValidos();
+
+		assertNotNull(buses.findById(1));
+		buses.delete(b);
 
 	}
 
@@ -103,13 +111,21 @@ public class TestTmio1BusesLogic {
 	public void addCamposInvalidosTest() {
 		assertNotNull(buses);
 		setupEscenarioCamposInvalidos();
-
+		assertNull(buses.findById(2));
 	}
 
 	@Test
 	public void updateCamposValidosTest() {
 		assertNotNull(buses);
 		setupEscenarioCamposValidos();
+		b.setModelo(new BigDecimal(4444));
+		b.setTipo("A");
+		b.setCapacidad(new BigDecimal(3));
+
+		assertEquals(buses.findById(1).getModelo(), new BigDecimal(4444));
+		assertEquals(buses.findById(1).getTipo(), "A");
+		assertEquals(buses.findById(1).getCapacidad(), new BigDecimal(3));
+		buses.delete(b);
 	}
 
 	@Test
@@ -118,8 +134,8 @@ public class TestTmio1BusesLogic {
 
 		setupEscenarioFindByModeloTipoCapacidad();
 		// me debe retornar una lista, hay que cambiar varios retornos
-		buses.findByModelo(new BigDecimal(1234));
-
+		List<Tmio1Bus> lista = buses.findByModelo(new BigDecimal(1234));
+		assertEquals(lista.size(), 2);
 	}
 
 	@Test
@@ -127,7 +143,8 @@ public class TestTmio1BusesLogic {
 		assertNotNull(buses);
 		// me debe retornar una lista
 		setupEscenarioFindByModeloTipoCapacidad();
-		buses.findByTipo("P");
+		List<Tmio1Bus> lista = buses.findByTipo("P");
+		assertEquals(lista.size(), 2);
 	}
 
 	@Test
@@ -135,6 +152,7 @@ public class TestTmio1BusesLogic {
 		assertNotNull(buses);
 		// me debe retornar una lista
 		setupEscenarioFindByModeloTipoCapacidad();
-		buses.findByCapacidad(new BigDecimal(2));
+		List<Tmio1Bus> lista = buses.findByCapacidad(new BigDecimal(2));
+		assertEquals(lista.size(), 1);
 	}
 }

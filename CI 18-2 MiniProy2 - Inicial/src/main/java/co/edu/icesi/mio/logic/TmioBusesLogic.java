@@ -1,6 +1,7 @@
 package co.edu.icesi.mio.logic;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -41,22 +42,25 @@ public class TmioBusesLogic implements ITmioBusesLogic {
 	}
 
 	@Override
-	public void findByModelo(BigDecimal m) {
+	public List<Tmio1Bus> findByModelo(BigDecimal m) {
 
 		if (modeloNumbersEFour(m))
-			buses.findByModel(em, m);
+			return buses.findByModel(em, m);
+		else return null;
 	}
 
 	@Override
-	public void findByTipo(String t) {
+	public List<Tmio1Bus> findByTipo(String t) {
 		if (tipoPAT(t))
-			buses.findByType(em, t);
+			return buses.findByType(em, t);
+		else return null;
 	}
 
 	@Override
-	public void findByCapacidad(BigDecimal c) {
+	public List<Tmio1Bus> findByCapacidad(BigDecimal c) {
 		if (capacidadMZero(c))
-			buses.findByCapacity(em, c);
+			return buses.findByCapacity(em, c);
+		else return null;
 	}
 
 	@Override

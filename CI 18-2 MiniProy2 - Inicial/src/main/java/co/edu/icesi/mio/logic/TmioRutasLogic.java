@@ -1,6 +1,7 @@
 package co.edu.icesi.mio.logic;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,15 +45,17 @@ public class TmioRutasLogic implements ITmioRutasLogic {
 	}
 
 	@Override
-	public void findByRangoDias(BigDecimal di, BigDecimal df) {
+	public List<Tmio1Ruta> findByRangoDias(BigDecimal di, BigDecimal df) {
 		// TODO Auto-generated method stub
 		if (validacionDiaInicio(di) && validacionDiaFin(df) && validacionDiaInicioMenorFin(di, df))
-			rutas.findByRangeOfDays(em, di, df);
+			return rutas.findByRangeOfDays(em, di, df);
+		else return null;
 	}
 
 	@Override
 	public Tmio1Ruta findById(int id) {
 		return rutas.findById(em, id);
+		
 	}
 
 	/**
