@@ -42,7 +42,7 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 		}	
 	}
 	
-	@Override
+	@Transactional
 	public void updateConductor(Tmio1Conductore conductor) {
 		
 		if(conductor != null && findByCedula(conductor.getCedula())!=null &&

@@ -7,10 +7,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import co.edu.icesi.mio.dao.ITmio1_Buses_DAO;
 import co.edu.icesi.mio.model.Tmio1Bus;
 
+@Service
 public class TmioBusesLogic implements ITmioBusesLogic {
 
 	@Autowired
@@ -19,29 +22,29 @@ public class TmioBusesLogic implements ITmioBusesLogic {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Override
+	@Transactional
 	public void add(Tmio1Bus bus) {
 
-		if (bus != null && buses.findById(em, bus.getId()) == null && placaMESix(bus) && marcaMEThree(bus)
+		if (bus != null && placaMESix(bus) && marcaMEThree(bus)
 				&& modeloNumbersEFour(bus.getModelo()) && tipoPAT(bus.getTipo()) && capacidadMZero(bus.getCapacidad()))
 			buses.save(em, bus);
 	}
 
-	@Override
+	@Transactional
 	public void update(Tmio1Bus bus) {
 		if (bus != null && buses.findById(em, bus.getId()) != null && placaMESix(bus) && marcaMEThree(bus)
 				&& modeloNumbersEFour(bus.getModelo()) && tipoPAT(bus.getTipo()) && capacidadMZero(bus.getCapacidad()))
 			buses.update(em, bus);
 	}
 
-	@Override
+	@Transactional
 	public void delete(Tmio1Bus bus) {
 
 		if (bus != null && buses.findById(em, bus.getId()) != null)
 			buses.delete(em, bus);
 	}
 
-	@Override
+	@Transactional
 	public List<Tmio1Bus> findByModelo(BigDecimal m) {
 
 		if (modeloNumbersEFour(m))
@@ -49,21 +52,21 @@ public class TmioBusesLogic implements ITmioBusesLogic {
 		else return null;
 	}
 
-	@Override
+	@Transactional
 	public List<Tmio1Bus> findByTipo(String t) {
 		if (tipoPAT(t))
 			return buses.findByType(em, t);
 		else return null;
 	}
 
-	@Override
+	@Transactional
 	public List<Tmio1Bus> findByCapacidad(BigDecimal c) {
 		if (capacidadMZero(c))
 			return buses.findByCapacity(em, c);
 		else return null;
 	}
 
-	@Override
+	@Transactional
 	public Tmio1Bus findById(int id) {
 		return buses.findById(em, id);
 	}
