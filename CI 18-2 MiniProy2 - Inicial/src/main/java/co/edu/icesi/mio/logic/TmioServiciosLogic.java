@@ -146,7 +146,7 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 				// 1.fin>r.inicio && inicio<r.inicio
 				// 2. inicio>r.inicio && fin<r.fin
 				// 3. inicio<r.fin && fin>r.fin
-				// 4. inicio<r.inicio && fin>r.fin
+
 			} else if ((s.getTmio1Ruta().getDiaFin().compareTo(r.getDiaInicio()) > 0
 					&& s.getTmio1Ruta().getDiaInicio().compareTo(r.getDiaInicio()) < 0)
 					|| (s.getTmio1Ruta().getDiaInicio().compareTo(r.getDiaInicio()) > 0
@@ -155,22 +155,24 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 							&& s.getTmio1Ruta().getDiaFin().compareTo(r.getDiaFin()) > 0)
 					|| (s.getTmio1Ruta().getDiaInicio().compareTo(r.getDiaInicio()) < 0
 							&& s.getTmio1Ruta().getDiaFin().compareTo(r.getDiaFin()) > 0)) {
-				hs.add(s.getTmio1Bus());
-				hs1.add(s.getTmio1Conductore());
-				// se hacen las mismas comparaciones en la hora
-				// si esta dentro del intervalo se agrega al hs de los rechazados
-			} else if ((s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraInicio()) > 0
-					&& s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraInicio()) < 0)
-					|| (s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraInicio()) > 0
-							&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) < 0)
-					|| (s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraFin()) < 0
-							&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) > 0)
-					|| (s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraInicio()) < 0
-							&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) > 0)) {
-				hs.add(s.getTmio1Bus());
-				hs1.add(s.getTmio1Conductore());
-			}
 
+				if ((s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraInicio()) > 0
+						&& s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraInicio()) < 0)
+						|| (s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraInicio()) > 0
+								&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) < 0)
+						|| (s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraFin()) < 0
+								&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) > 0)
+						|| (s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraInicio()) < 0
+								&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) > 0)) {
+					hs.add(s.getTmio1Bus());
+					hs1.add(s.getTmio1Conductore());
+					// se hacen las mismas comparaciones en la hora
+					// si esta dentro del intervalo se agrega al hs de los rechazados
+					// 4. inicio<r.inicio && fin>r.fin
+
+				}
+
+			}
 		}
 
 		if (!hs.contains(b) && !hs1.contains(c)) {

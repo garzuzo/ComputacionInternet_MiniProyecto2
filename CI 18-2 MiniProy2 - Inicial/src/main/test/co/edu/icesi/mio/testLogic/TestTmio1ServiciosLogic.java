@@ -107,10 +107,31 @@ public class TestTmio1ServiciosLogic {
 		serviciosLogic.createServicio(s1);
 
 		assertNotNull(serviciosLogic.getServicio(s1PK));
-		eliminarDatos(b, tmioConductor, s1, ruta);
+		eliminarDatos1(b, tmioConductor, s1, ruta);
 	}
 
-	public void eliminarDatos(Tmio1Bus b, Tmio1Conductore c, Tmio1Servicio s, Tmio1Ruta r) {
+	public void eliminarDatos1(Tmio1Bus b, Tmio1Conductore c, Tmio1Servicio s, Tmio1Ruta r) {
+		serviciosLogic.deleteServicio(s);
+		busesLogic.delete(b);
+		conductoresLogic.deleteConductor(c);
+
+		rutasLogic.delete(r);
+	}
+	public void eliminarDatos2(Tmio1Bus b, Tmio1Conductore c, Tmio1Servicio s, Tmio1Ruta r) {
+		serviciosLogic.deleteServicio(s);
+		busesLogic.delete(b);
+		conductoresLogic.deleteConductor(c);
+
+		rutasLogic.delete(r);
+	}
+	public void eliminarDatos3(Tmio1Bus b, Tmio1Conductore c, Tmio1Servicio s, Tmio1Ruta r) {
+		serviciosLogic.deleteServicio(s);
+		busesLogic.delete(b);
+		conductoresLogic.deleteConductor(c);
+
+		rutasLogic.delete(r);
+	}
+	public void eliminarDatos4(Tmio1Bus b, Tmio1Conductore c, Tmio1Servicio s, Tmio1Ruta r) {
 		serviciosLogic.deleteServicio(s);
 		busesLogic.delete(b);
 		conductoresLogic.deleteConductor(c);
@@ -328,7 +349,7 @@ public class TestTmio1ServiciosLogic {
 		
 		Tmio1Servicio servicio=serviciosLogic.getServicio(s1PK);
 		Tmio1Conductore tmioConductor2 = new Tmio1Conductore();
-		//tmioConductor2.setCedula("1143874289");
+		tmioConductor2.setCedula("1143874289");
 		tmioConductor2.setNombre("Camilo");
 		tmioConductor2.setApellidos("Perez");
 		Calendar d4 = new GregorianCalendar(2018,1,20);
@@ -343,7 +364,7 @@ public class TestTmio1ServiciosLogic {
 		serviciosLogic.updateServicio(servicio);
 		assertEquals("1143874289", serviciosLogic.getServicio(servicio.getId()).getTmio1Conductore().getCedula());
 		
-		eliminarDatos(b, tmioConductor, servicio, ruta);
+		eliminarDatos2(b, tmioConductor, servicio, ruta);
 	}
 	
 	@Test
@@ -410,7 +431,7 @@ public class TestTmio1ServiciosLogic {
 		assertNotNull("No existen servicios en este rango de fechas", servicios);
 		assertEquals(1, servicios.size());
 		assertEquals("1143874290", servicios.get(0).getTmio1Conductore().getCedula());
-		eliminarDatos(b, tmioConductor, s1, ruta);
+		eliminarDatos3(b, tmioConductor, s1, ruta);
 	}
 	
 	@Test
