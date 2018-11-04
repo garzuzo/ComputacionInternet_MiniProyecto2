@@ -61,7 +61,7 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 	@Transactional
 	public void deleteConductor(Tmio1Conductore conductor) {
 		if(conductor!=null && findByCedula(conductor.getCedula())!=null)
-		conductorDAO.delete(em, conductor);
+		conductorDAO.delete(em, findByCedula(conductor.getCedula()));
 	}
 
 	@Transactional

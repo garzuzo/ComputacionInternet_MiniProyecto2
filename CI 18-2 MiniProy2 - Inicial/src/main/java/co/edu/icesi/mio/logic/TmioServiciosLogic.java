@@ -42,9 +42,6 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 
 	@Transactional
 	public void createServicio(Tmio1Servicio servicio) {
-		// hacer validaciones sobre conductor
-		// NO ESTOY SEGURA DE PASAR EL ENTITYMANAGER COMO PARAMETRO O DEBE CREARSE.
-
 		if (servicio != null && getServicio(servicio.getId()) == null
 				&& validacionLlavesForaneas(servicio.getTmio1Bus(), servicio.getTmio1Conductore(),
 						servicio.getTmio1Ruta())

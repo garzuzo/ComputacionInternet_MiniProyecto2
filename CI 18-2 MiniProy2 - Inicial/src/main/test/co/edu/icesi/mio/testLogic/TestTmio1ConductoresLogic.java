@@ -2,6 +2,8 @@ package co.edu.icesi.mio.testLogic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +45,7 @@ public class TestTmio1ConductoresLogic {
 		tmioConductor.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());
 		
 		conductorLogic.createConductor(tmioConductor);
+		assertNotNull(conductorLogic.findByCedula("1143874310"));
 		
 		Tmio1Conductore tmioConductor2 = new Tmio1Conductore();
 		tmioConductor2.setCedula("1143874314");
@@ -56,6 +59,7 @@ public class TestTmio1ConductoresLogic {
 		tmioConductor2.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());
 		
 		conductorLogic.createConductor(tmioConductor2);
+		assertNotNull(conductorLogic.findByCedula("1143874314"));
 	}
 	
 	@Test
@@ -74,6 +78,7 @@ public class TestTmio1ConductoresLogic {
 		tmioConductor.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());
 		
 		conductorLogic.createConductor(tmioConductor);
+		assertNull(conductorLogic.findByCedula("114387431A"));
 	}
 	
 	@Test
@@ -91,7 +96,10 @@ public class TestTmio1ConductoresLogic {
 		tmioConductor.setTmio1Servicios(new ArrayList<Tmio1Servicio>());
 		tmioConductor.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());
 		
-		conductorLogic.createConductor(tmioConductor);
+		conductorLogic.updateConductor(tmioConductor);
+		assertEquals("Sandra Mishale", conductorLogic.findByCedula("1143874310").getNombre());
+		assertEquals("Nino Arbelaez", conductorLogic.findByCedula("1143874310").getApellidos());
+		//conductorLogic.deleteConductor(tmioConductor);
 	}
 	
 	@Test
@@ -111,7 +119,10 @@ public class TestTmio1ConductoresLogic {
 		List<Tmio1Conductore> conductores = conductorLogic.findByLastname("Nino Arbelaez");
 		assertNotNull("No se encontro el conductor por ese nombre", conductores);
 		assertEquals(2, conductores.size());
-		assertEquals("1143874310", conductores.get(0).getCedula());
-		assertEquals("1143874314", conductores.get(1).getCedula());
+		for(int i=0;i<conductores.size(); i++) {
+			System.out.println(conductores.get(i).getCedula());
+		}
+		assertTrue(conductores.get(0).getCedula().equals("1143874310") || conductores.get(1).getCedula().equals("1143874310"));
+		assertTrue(conductores.get(0).getCedula().equals("1143874314") || conductores.get(1).getCedula().equals("1143874314"));
 	}	
 }
