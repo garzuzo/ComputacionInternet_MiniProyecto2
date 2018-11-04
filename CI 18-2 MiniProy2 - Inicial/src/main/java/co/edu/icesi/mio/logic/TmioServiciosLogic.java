@@ -53,7 +53,7 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 		}
 	}
 
-	@Override
+	@Transactional
 	public void updateServicio(Tmio1Servicio servicio) {
 		if (servicio != null && getServicio(servicio.getId()) != null
 				&& validacionLlavesForaneas(servicio.getTmio1Bus(), servicio.getTmio1Conductore(),
@@ -69,7 +69,7 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 	@Transactional
 	public void deleteServicio(Tmio1Servicio servicio) {
 		if (servicio != null && getServicio(servicio.getId()) != null)
-			servicioDAO.delete(em, servicio);
+			servicioDAO.delete(em, getServicio(servicio.getId()));
 	}
 	
 	@Transactional
@@ -78,6 +78,11 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 		if(d1!=null && d2!=null)
 			servicios= servicioDAO.findByRangeOfDates(em,d1, d2);
 		return servicios;
+	}
+	
+	@Transactional
+	public Tmio1Servicio getServicio(Tmio1ServicioPK id) {
+		return servicioDAO.findById(em, id);
 	}
 
 	/**
@@ -90,9 +95,9 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 	public boolean validacionLlavesForaneas(Tmio1Bus bus, Tmio1Conductore conductor, Tmio1Ruta ruta) {
 		boolean validacion = false;
 
-		if (bus != null && conductor != null && ruta != null && busDAO.findById(em, bus.getId()) != null
-				&& conductorDAO.findByCedula(em, conductor.getCedula()) != null
-				&& rutaDAO.findById(em, ruta.getId()) != null)
+		if (bus != null && conductor != null && ruta != null && findById(bus.getId()) != null
+				&& findByCedula(conductor.getCedula()) != null
+				&& findByIdRuta(ruta.getId()) != null)
 			validacion = true;
 
 		return validacion;
@@ -105,13 +110,31 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 
 	public boolean validacionBusesYConductoresDisponibles(Tmio1Bus b, Tmio1Conductore c) {
 		boolean validacion = false;
-		if (!busDAO.busesThatAreFree(em).contains(b) && !conductorDAO.driversThatAreFree(em).contains(c)) {
+		if (busDAO.busesThatAreFree(em).contains(b) && conductorDAO.driversThatAreFree(em).contains(c)) {
 			validacion = true;
 		}
 		return validacion;
 	}
 
-	public Tmio1Servicio getServicio(Tmio1ServicioPK id) {
-		return servicioDAO.findById(em, id);
+	@Transactional
+	public Tmio1Bus findById(int id) {
+		return busDAO.findById(em, id);
+	}
+	
+	public boolean validacionCedula(String cedula) {
+		return cedula.matches("[0-9]+");
+	}
+	
+	@Transactional
+	public Tmio1Conductore findByCedula(String cedula) {
+		Tmio1Conductore conductor= null;
+		if(validacionCedula(cedula))
+			conductor= conductorDAO.findByCedula(em, cedula);
+		return conductor; 
+	}
+	
+	@Transactional
+	public Tmio1Ruta findByIdRuta(int id) {
+		return rutaDAO.findById(em, id);		
 	}
 }
