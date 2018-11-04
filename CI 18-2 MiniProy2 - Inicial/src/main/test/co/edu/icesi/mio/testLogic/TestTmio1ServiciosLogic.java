@@ -276,7 +276,7 @@ public class TestTmio1ServiciosLogic {
 		s2PK.setIdRuta(ruta2.getId());
 		Calendar d4 = new GregorianCalendar(2018,2,20);
 		s2PK.setFechaInicio(d4.getTime());
-		Calendar d5 = new GregorianCalendar(2018,5,25);
+		Calendar d5 = new GregorianCalendar(2018,11,25);
 		s2PK.setFechaFin(d5.getTime());
 		
 		Tmio1Servicio s2= new Tmio1Servicio();

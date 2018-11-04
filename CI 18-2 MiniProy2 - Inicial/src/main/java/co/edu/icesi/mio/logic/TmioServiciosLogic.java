@@ -121,11 +121,11 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 	}
 
 	@Transactional
-	public HashSet<Tmio1Bus> findAllBuses() {
-		HashSet<Tmio1Bus> hs = new HashSet<Tmio1Bus>();
+	public HashSet<Integer> findAllBuses() {
+		HashSet<Integer> hs = new HashSet<Integer>();
 		List<Tmio1Bus> buses = busDAO.findAll(em);
 		for (Tmio1Bus b : buses) {
-			hs.add(b);
+			hs.add(b.getId());
 
 		}
 		return hs;
@@ -133,15 +133,15 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 
 	public boolean busesConductoresLibres(Tmio1Bus b, Tmio1Ruta r, Tmio1Conductore c) {
 
-		HashSet<Tmio1Bus> hs = new HashSet<Tmio1Bus>();
-		HashSet<Tmio1Conductore> hs1 = new HashSet<Tmio1Conductore>();
+		HashSet<Integer> hs = new HashSet<Integer>();
+		HashSet<String> hs1 = new HashSet<String>();
 		Date fechaActual = GregorianCalendar.getInstance().getTime();
 		List<Tmio1Servicio> servicios = findAllServicios();
 		for (Tmio1Servicio s : servicios) {
 
 			if ((s.getId().getFechaFin()).compareTo(fechaActual) > 0) {
-				hs.add(s.getTmio1Bus());
-				hs1.add(s.getTmio1Conductore());
+				hs.add(s.getTmio1Bus().getId());
+				hs1.add(s.getTmio1Conductore().getCedula());
 				// tengo que hacer 3 comparaciones:
 				// 1.fin>r.inicio && inicio<r.inicio
 				// 2. inicio>r.inicio && fin<r.fin
@@ -164,8 +164,8 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 								&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) > 0)
 						|| (s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraInicio()) < 0
 								&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) > 0)) {
-					hs.add(s.getTmio1Bus());
-					hs1.add(s.getTmio1Conductore());
+					hs.add(s.getTmio1Bus().getId());
+					hs1.add(s.getTmio1Conductore().getCedula());
 					// se hacen las mismas comparaciones en la hora
 					// si esta dentro del intervalo se agrega al hs de los rechazados
 					// 4. inicio<r.inicio && fin>r.fin
@@ -175,7 +175,7 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 			}
 		}
 
-		if (!hs.contains(b) && !hs1.contains(c)) {
+		if (!hs.contains(b.getId()) && !hs1.contains(c.getCedula())) {
 			return true;
 		} else {
 			return false;
