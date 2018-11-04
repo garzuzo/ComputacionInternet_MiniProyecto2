@@ -3,6 +3,8 @@ package co.edu.icesi.mio.logic;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -45,11 +47,10 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 		if (servicio != null
 				&& validacionLlavesForaneas(servicio.getTmio1Bus(), servicio.getTmio1Conductore(),
 						servicio.getTmio1Ruta())
-				&& validacionBusesYConductoresDisponibles(servicio.getTmio1Bus(), servicio.getTmio1Conductore())
+				&& validacionBusesYConductoresDisponibles(servicio.getTmio1Bus(), servicio.getTmio1Ruta(),
+						servicio.getTmio1Conductore())
 				&& validacionFechaInicioFinal(servicio.getId().getFechaInicio(), servicio.getId().getFechaFin())) {
 			servicioDAO.save(em, servicio);
-		} else {
-			// LANZAR UNA EXCEPCION
 		}
 	}
 
@@ -58,11 +59,10 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 		if (servicio != null && getServicio(servicio.getId()) != null
 				&& validacionLlavesForaneas(servicio.getTmio1Bus(), servicio.getTmio1Conductore(),
 						servicio.getTmio1Ruta())
-				&& validacionBusesYConductoresDisponibles(servicio.getTmio1Bus(), servicio.getTmio1Conductore())
+				&& validacionBusesYConductoresDisponibles(servicio.getTmio1Bus(), servicio.getTmio1Ruta(),
+						servicio.getTmio1Conductore())
 				&& validacionFechaInicioFinal(servicio.getId().getFechaInicio(), servicio.getId().getFechaFin())) {
 			servicioDAO.update(em, servicio);
-		} else {
-			// LANZAR UNA EXCEPCION
 		}
 	}
 
@@ -71,15 +71,15 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 		if (servicio != null && getServicio(servicio.getId()) != null)
 			servicioDAO.delete(em, getServicio(servicio.getId()));
 	}
-	
+
 	@Transactional
 	public List<Tmio1Servicio> findByRangeOfDates(Calendar d1, Calendar d2) {
-		List<Tmio1Servicio> servicios=null;
-		if(d1!=null && d2!=null)
-			servicios= servicioDAO.findByRangeOfDates(em,d1, d2);
+		List<Tmio1Servicio> servicios = null;
+		if (d1 != null && d2 != null)
+			servicios = servicioDAO.findByRangeOfDates(em, d1, d2);
 		return servicios;
 	}
-	
+
 	@Transactional
 	public Tmio1Servicio getServicio(Tmio1ServicioPK id) {
 		return servicioDAO.findById(em, id);
@@ -96,8 +96,7 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 		boolean validacion = false;
 
 		if (bus != null && conductor != null && ruta != null && findById(bus.getId()) != null
-				&& findByCedula(conductor.getCedula()) != null
-				&& findByIdRuta(ruta.getId()) != null)
+				&& findByCedula(conductor.getCedula()) != null && findByIdRuta(ruta.getId()) != null)
 			validacion = true;
 
 		return validacion;
@@ -108,33 +107,102 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 		return fechaInicio.compareTo(fechaFin) <= 0 ? true : false;
 	}
 
-	public boolean validacionBusesYConductoresDisponibles(Tmio1Bus b, Tmio1Conductore c) {
+	public boolean validacionBusesYConductoresDisponibles(Tmio1Bus b, Tmio1Ruta r, Tmio1Conductore c) {
 		boolean validacion = false;
-		if (busDAO.busesThatAreFree(em).contains(b) && conductorDAO.driversThatAreFree(em).contains(c)) {
+		if (busesConductoresLibres(b, r, c)) {
 			validacion = true;
 		}
 		return validacion;
 	}
 
 	@Transactional
+	public List<Tmio1Servicio> findAllServicios() {
+		return servicioDAO.findAll(em);
+	}
+
+	@Transactional
+	public HashSet<Tmio1Bus> findAllBuses() {
+		HashSet<Tmio1Bus> hs = new HashSet<Tmio1Bus>();
+		List<Tmio1Bus> buses = busDAO.findAll(em);
+		for (Tmio1Bus b : buses) {
+			hs.add(b);
+
+		}
+		return hs;
+	}
+
+	public boolean busesConductoresLibres(Tmio1Bus b, Tmio1Ruta r, Tmio1Conductore c) {
+
+		HashSet<Tmio1Bus> hs = new HashSet<Tmio1Bus>();
+		HashSet<Tmio1Conductore> hs1 = new HashSet<Tmio1Conductore>();
+		Date fechaActual = GregorianCalendar.getInstance().getTime();
+		List<Tmio1Servicio> servicios = findAllServicios();
+		for (Tmio1Servicio s : servicios) {
+
+			if ((s.getId().getFechaFin()).compareTo(fechaActual) > 0) {
+				hs.add(s.getTmio1Bus());
+				hs1.add(s.getTmio1Conductore());
+				// tengo que hacer 3 comparaciones:
+				// 1.fin>r.inicio && inicio<r.inicio
+				// 2. inicio>r.inicio && fin<r.fin
+				// 3. inicio<r.fin && fin>r.fin
+				// 4. inicio<r.inicio && fin>r.fin
+			} else if ((s.getTmio1Ruta().getDiaFin().compareTo(r.getDiaInicio()) > 0
+					&& s.getTmio1Ruta().getDiaInicio().compareTo(r.getDiaInicio()) < 0)
+					|| (s.getTmio1Ruta().getDiaInicio().compareTo(r.getDiaInicio()) > 0
+							&& s.getTmio1Ruta().getDiaFin().compareTo(r.getDiaFin()) < 0)
+					|| (s.getTmio1Ruta().getDiaInicio().compareTo(r.getDiaFin()) < 0
+							&& s.getTmio1Ruta().getDiaFin().compareTo(r.getDiaFin()) > 0)
+					|| (s.getTmio1Ruta().getDiaInicio().compareTo(r.getDiaInicio()) < 0
+							&& s.getTmio1Ruta().getDiaFin().compareTo(r.getDiaFin()) > 0)) {
+				hs.add(s.getTmio1Bus());
+				hs1.add(s.getTmio1Conductore());
+				// se hacen las mismas comparaciones en la hora
+				// si esta dentro del intervalo se agrega al hs de los rechazados
+			} else if ((s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraInicio()) > 0
+					&& s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraInicio()) < 0)
+					|| (s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraInicio()) > 0
+							&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) < 0)
+					|| (s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraFin()) < 0
+							&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) > 0)
+					|| (s.getTmio1Ruta().getHoraInicio().compareTo(r.getHoraInicio()) < 0
+							&& s.getTmio1Ruta().getHoraFin().compareTo(r.getHoraFin()) > 0)) {
+				hs.add(s.getTmio1Bus());
+				hs1.add(s.getTmio1Conductore());
+			}
+
+		}
+
+		if (!hs.contains(b) && !hs1.contains(c)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void conductoresLibres() {
+
+	}
+
+	@Transactional
 	public Tmio1Bus findById(int id) {
 		return busDAO.findById(em, id);
 	}
-	
+
 	public boolean validacionCedula(String cedula) {
 		return cedula.matches("[0-9]+");
 	}
-	
+
 	@Transactional
 	public Tmio1Conductore findByCedula(String cedula) {
-		Tmio1Conductore conductor= null;
-		if(validacionCedula(cedula))
-			conductor= conductorDAO.findByCedula(em, cedula);
-		return conductor; 
+		Tmio1Conductore conductor = null;
+		if (validacionCedula(cedula))
+			conductor = conductorDAO.findByCedula(em, cedula);
+		return conductor;
 	}
-	
+
 	@Transactional
 	public Tmio1Ruta findByIdRuta(int id) {
-		return rutaDAO.findById(em, id);		
+		return rutaDAO.findById(em, id);
 	}
 }
