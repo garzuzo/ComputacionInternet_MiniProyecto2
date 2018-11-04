@@ -119,10 +119,9 @@ public class TestTmio1ServiciosLogic {
 	}
 	public void eliminarDatos2(Tmio1Bus b, Tmio1Conductore c, Tmio1Servicio s, Tmio1Ruta r) {
 		serviciosLogic.deleteServicio(s);
-		busesLogic.delete(b);
-		conductoresLogic.deleteConductor(c);
-
+		
 		rutasLogic.delete(r);
+		busesLogic.delete(b);
 	}
 	public void eliminarDatos3(Tmio1Bus b, Tmio1Conductore c, Tmio1Servicio s, Tmio1Ruta r) {
 		serviciosLogic.deleteServicio(s);
@@ -355,7 +354,6 @@ public class TestTmio1ServiciosLogic {
 		nuevo.setTime(s1PK.getFechaInicio());
 		assertEquals(22, nuevo.get(Calendar.DAY_OF_MONTH));
 		
-		eliminarDatos2(b, tmioConductor, s1, ruta);
 	}
 	
 	@Test
