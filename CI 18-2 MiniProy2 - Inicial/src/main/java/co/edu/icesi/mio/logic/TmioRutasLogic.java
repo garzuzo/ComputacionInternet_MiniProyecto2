@@ -7,10 +7,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import co.edu.icesi.mio.dao.ITmio1_Rutas_DAO;
 import co.edu.icesi.mio.model.Tmio1Ruta;
 
+@Service
 public class TmioRutasLogic implements ITmioRutasLogic {
 
 	@Autowired
@@ -19,17 +22,19 @@ public class TmioRutasLogic implements ITmioRutasLogic {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Override
-	public void add(Tmio1Ruta ruta) {
+	@Transactional
+	public boolean add(Tmio1Ruta ruta) {
 
-		if (ruta != null && validacionNumeroRuta(ruta)
-				&& validacionDiaInicio(ruta) && validacionDiaFin(ruta) && validacionDiaInicioMenorFin(ruta)
-				&& validacionHoraFin(ruta) && validacionHoraInicio(ruta) && validacionHoraInicioMenorFin(ruta)
-				&& validacionActiva(ruta))
+		if (ruta != null && validacionNumeroRuta(ruta) && validacionDiaInicio(ruta) && validacionDiaFin(ruta)
+				&& validacionDiaInicioMenorFin(ruta) && validacionHoraFin(ruta) && validacionHoraInicio(ruta)
+				&& validacionHoraInicioMenorFin(ruta) && validacionActiva(ruta)) {
 			rutas.save(em, ruta);
+			return true;
+		} else
+			return false;
 	}
 
-	@Override
+	@Transactional
 	public void update(Tmio1Ruta ruta) {
 		if (ruta != null && rutas.findById(em, ruta.getId()) != null && validacionNumeroRuta(ruta)
 				&& validacionDiaInicio(ruta) && validacionDiaFin(ruta) && validacionDiaInicioMenorFin(ruta)
@@ -38,24 +43,25 @@ public class TmioRutasLogic implements ITmioRutasLogic {
 			rutas.update(em, ruta);
 	}
 
-	@Override
+	@Transactional
 	public void delete(Tmio1Ruta ruta) {
-		if (ruta != null && rutas.findById(em, ruta.getId()) != null)
-			rutas.delete(em, ruta);
+		if (ruta != null && findById(ruta.getId()) != null)
+			rutas.delete(em, findById(ruta.getId()));
 	}
 
-	@Override
+	@Transactional
 	public List<Tmio1Ruta> findByRangoDias(BigDecimal di, BigDecimal df) {
 		// TODO Auto-generated method stub
 		if (validacionDiaInicio(di) && validacionDiaFin(df) && validacionDiaInicioMenorFin(di, df))
 			return rutas.findByRangeOfDays(em, di, df);
-		else return null;
+		else
+			return null;
 	}
 
-	@Override
+	@Transactional
 	public Tmio1Ruta findById(int id) {
 		return rutas.findById(em, id);
-		
+
 	}
 
 	/**
@@ -92,12 +98,12 @@ public class TmioRutasLogic implements ITmioRutasLogic {
 	}
 
 	public boolean validacionHoraFin(Tmio1Ruta ruta) {
-		return ruta.getHoraFin().compareTo(BigDecimal.ONE) >= 1
+		return ruta.getHoraFin().compareTo(BigDecimal.ONE) >= 0
 				&& ruta.getHoraFin().compareTo(new BigDecimal("1440")) <= 0;
 	}
 
 	public boolean validacionHoraInicio(Tmio1Ruta ruta) {
-		return ruta.getHoraInicio().compareTo(BigDecimal.ONE) >= 1
+		return ruta.getHoraInicio().compareTo(BigDecimal.ONE) >= 0
 				&& ruta.getHoraInicio().compareTo(new BigDecimal("1440")) <= 0;
 	}
 
