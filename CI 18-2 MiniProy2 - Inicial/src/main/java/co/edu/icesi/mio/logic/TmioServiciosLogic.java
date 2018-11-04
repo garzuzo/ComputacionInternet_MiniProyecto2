@@ -42,7 +42,7 @@ public class TmioServiciosLogic implements ITmioServiciosLogic {
 
 	@Transactional
 	public void createServicio(Tmio1Servicio servicio) {
-		if (servicio != null && getServicio(servicio.getId()) == null
+		if (servicio != null
 				&& validacionLlavesForaneas(servicio.getTmio1Bus(), servicio.getTmio1Conductore(),
 						servicio.getTmio1Ruta())
 				&& validacionBusesYConductoresDisponibles(servicio.getTmio1Bus(), servicio.getTmio1Conductore())

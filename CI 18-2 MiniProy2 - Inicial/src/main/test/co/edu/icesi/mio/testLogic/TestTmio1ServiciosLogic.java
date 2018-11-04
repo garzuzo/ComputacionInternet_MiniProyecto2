@@ -47,9 +47,6 @@ public class TestTmio1ServiciosLogic {
 	@Autowired
 	public ITmioRutasLogic rutasLogic;
 	
-	private Tmio1Bus b;
-	private Tmio1Conductore tmioConductor;
-	private Tmio1Ruta ruta;
 	@Test
 	public void testCrearServicioCamposValidos() {
 		assertNotNull(serviciosLogic);
@@ -57,7 +54,7 @@ public class TestTmio1ServiciosLogic {
 		assertNotNull(busesLogic);
 		assertNotNull(rutasLogic);
 		
-		b = new Tmio1Bus();
+		Tmio1Bus b = new Tmio1Bus();
 		b.setCapacidad(new BigDecimal(110));
 		b.setMarca("Volvo");
 		b.setModelo(new BigDecimal(2010));
@@ -65,7 +62,7 @@ public class TestTmio1ServiciosLogic {
 		b.setTipo("T");
 		busesLogic.add(b);
 		
-		tmioConductor = new Tmio1Conductore();
+		Tmio1Conductore tmioConductor = new Tmio1Conductore();
     	tmioConductor.setCedula("1143874318");
 		tmioConductor.setNombre("Johnatan");
 		tmioConductor.setApellidos("Garzon");
@@ -77,7 +74,7 @@ public class TestTmio1ServiciosLogic {
 		tmioConductor.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());		
 		conductoresLogic.createConductor(tmioConductor);
 		
-		ruta= new Tmio1Ruta();
+		Tmio1Ruta ruta= new Tmio1Ruta();
 		ruta.setActiva("S");
 		ruta.setDescripcion("Ruta Cañasgordas");
 		ruta.setDiaInicio(new BigDecimal(1));
@@ -107,8 +104,15 @@ public class TestTmio1ServiciosLogic {
 	
 		serviciosLogic.createServicio(s1);
 		assertNotNull(serviciosLogic.getServicio(s1PK));
+		eliminarDatos(b, tmioConductor, s1, ruta);
 	}
 	
+	public void eliminarDatos(Tmio1Bus b, Tmio1Conductore c, Tmio1Servicio s, Tmio1Ruta r){
+		busesLogic.delete(b);
+		conductoresLogic.deleteConductor(c);
+		serviciosLogic.deleteServicio(s);
+		rutasLogic.delete(r);
+	}
 	@Test
 	public void testCrearServicioCamposInvalidos() {
 		assertNotNull(serviciosLogic);
@@ -176,7 +180,59 @@ public class TestTmio1ServiciosLogic {
 		assertNotNull(busesLogic);
 		assertNotNull(rutasLogic);
 		
+		Tmio1Bus b = new Tmio1Bus();
+		b.setCapacidad(new BigDecimal(110));
+		b.setMarca("Volvo");
+		b.setModelo(new BigDecimal(2010));
+		b.setPlaca("EVN876");
+		b.setTipo("T");
+		busesLogic.add(b);
+		
+		Tmio1Conductore tmioConductor = new Tmio1Conductore();
+    	tmioConductor.setCedula("1143874318");
+		tmioConductor.setNombre("Johnatan");
+		tmioConductor.setApellidos("Garzon");
+		Calendar d = new GregorianCalendar(2018,01,20);
+		tmioConductor.setFechaContratacion(d.getTime());
+		Calendar d1 = new GregorianCalendar(1988,01,18);
+		tmioConductor.setFechaNacimiento(d1.getTime());
+		tmioConductor.setTmio1Servicios(new ArrayList<Tmio1Servicio>());
+		tmioConductor.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());		
+		conductoresLogic.createConductor(tmioConductor);
+		
 		Tmio1Ruta ruta= new Tmio1Ruta();
+		ruta.setActiva("S");
+		ruta.setDescripcion("Ruta Cañasgordas");
+		ruta.setDiaInicio(new BigDecimal(1));
+		ruta.setDiaFin(new BigDecimal(6));
+		ruta.setHoraInicio(new BigDecimal(6));
+		ruta.setHoraFin(new BigDecimal(17));
+		ruta.setNumero("A11");
+    	ruta.setTmio1Servicios(new ArrayList<Tmio1Servicio>());
+    	ruta.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());
+    	ruta.setTmio1SitiosRutas1(new ArrayList<Tmio1SitiosRuta>());
+    	rutasLogic.add(ruta);
+    	 
+		Tmio1ServicioPK s1PK = new Tmio1ServicioPK();
+		s1PK.setCedulaConductor(tmioConductor.getCedula());
+		s1PK.setIdBus(b.getId());
+		s1PK.setIdRuta(ruta.getId());
+		Calendar d2 = new GregorianCalendar(2018,01,20);
+		s1PK.setFechaInicio(d2.getTime());
+		Calendar d3 = new GregorianCalendar(2018,11,25);
+		s1PK.setFechaFin(d3.getTime());
+		
+		Tmio1Servicio s1= new Tmio1Servicio();
+		s1.setId(s1PK);
+		s1.setTmio1Bus(busesLogic.findById(b.getId()));
+		s1.setTmio1Conductore(conductoresLogic.findByCedula(tmioConductor.getCedula()));
+		s1.setTmio1Ruta(rutasLogic.findById(ruta.getId()));
+	
+		serviciosLogic.createServicio(s1);
+		assertNotNull(serviciosLogic.getServicio(s1PK));
+		
+		
+		Tmio1Ruta ruta2= new Tmio1Ruta();
 		ruta.setActiva("S");
 		ruta.setDescripcion("Ruta Cañasgordas");
 		ruta.setDiaInicio(new BigDecimal(1));
@@ -189,23 +245,23 @@ public class TestTmio1ServiciosLogic {
     	ruta.setTmio1SitiosRutas1(new ArrayList<Tmio1SitiosRuta>());
     	rutasLogic.add(ruta);
     	
-		Tmio1ServicioPK s1PK = new Tmio1ServicioPK();
-		s1PK.setCedulaConductor(tmioConductor.getCedula());
-		s1PK.setIdBus(b.getId());
-		s1PK.setIdRuta(ruta.getId());
-		Calendar d2 = new GregorianCalendar(2018,03,20);
-		s1PK.setFechaInicio(d2.getTime());
-		Calendar d3 = new GregorianCalendar(2018,10,25);
-		s1PK.setFechaFin(d3.getTime());
+		Tmio1ServicioPK s2PK = new Tmio1ServicioPK();
+		s2PK.setCedulaConductor(tmioConductor.getCedula());
+		s2PK.setIdBus(b.getId());
+		s2PK.setIdRuta(ruta2.getId());
+		Calendar d4 = new GregorianCalendar(2018,3,20);
+		s2PK.setFechaInicio(d4.getTime());
+		Calendar d5 = new GregorianCalendar(2018,10,25);
+		s2PK.setFechaFin(d5.getTime());
 		
-		Tmio1Servicio s1= new Tmio1Servicio();
-		s1.setId(s1PK);
-		s1.setTmio1Bus(busesLogic.findById(b.getId()));
-		s1.setTmio1Conductore(conductoresLogic.findByCedula(tmioConductor.getCedula()));
-		s1.setTmio1Ruta(rutasLogic.findById(ruta.getId()));
+		Tmio1Servicio s2= new Tmio1Servicio();
+		s2.setId(s2PK);
+		s2.setTmio1Bus(busesLogic.findById(b.getId()));
+		s2.setTmio1Conductore(conductoresLogic.findByCedula(tmioConductor.getCedula()));
+		s2.setTmio1Ruta(rutasLogic.findById(ruta2.getId()));
 	
-		serviciosLogic.createServicio(s1);
-		assertNull(serviciosLogic.getServicio(s1PK));
+		serviciosLogic.createServicio(s2);
+		assertNull(serviciosLogic.getServicio(s2PK));
 	}
 	
 	@Test
@@ -227,7 +283,7 @@ public class TestTmio1ServiciosLogic {
     	tmioConductor.setCedula("1143874288");
 		tmioConductor.setNombre("Luis");
 		tmioConductor.setApellidos("Perez");
-		Calendar d = new GregorianCalendar(2018,01,20);
+		Calendar d = new GregorianCalendar(2018,1,20);
 		tmioConductor.setFechaContratacion(d.getTime());
 		Calendar d1 = new GregorianCalendar(1988,01,18);
 		tmioConductor.setFechaNacimiento(d1.getTime());
@@ -252,7 +308,7 @@ public class TestTmio1ServiciosLogic {
 		s1PK.setCedulaConductor(tmioConductor.getCedula());
 		s1PK.setIdBus(b.getId());
 		s1PK.setIdRuta(ruta.getId());
-		Calendar d2 = new GregorianCalendar(2018,03,20);
+		Calendar d2 = new GregorianCalendar(2018,3,20);
 		s1PK.setFechaInicio(d2.getTime());
 		Calendar d3 = new GregorianCalendar(2018,11,25);
 		s1PK.setFechaFin(d3.getTime());
@@ -271,17 +327,19 @@ public class TestTmio1ServiciosLogic {
 		tmioConductor2.setCedula("1143874289");
 		tmioConductor2.setNombre("Camilo");
 		tmioConductor2.setApellidos("Perez");
-		Calendar d4 = new GregorianCalendar(2018,01,20);
+		Calendar d4 = new GregorianCalendar(2018,1,20);
 		tmioConductor2.setFechaContratacion(d4.getTime());
-		Calendar d5 = new GregorianCalendar(1988,01,18);
+		Calendar d5 = new GregorianCalendar(1988,1,18);
 		tmioConductor2.setFechaNacimiento(d5.getTime());
 		tmioConductor2.setTmio1Servicios(new ArrayList<Tmio1Servicio>());
 		tmioConductor2.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());		
-		conductoresLogic.createConductor(tmioConductor);
+		conductoresLogic.createConductor(tmioConductor2);
 	
 		servicio.setTmio1Conductore(tmioConductor2);
 		serviciosLogic.updateServicio(servicio);
 		assertEquals("1143874289", serviciosLogic.getServicio(servicio.getId()).getTmio1Conductore().getCedula());
+		
+		eliminarDatos(b, tmioConductor, servicio, ruta);
 	}
 	
 	@Test
@@ -348,6 +406,7 @@ public class TestTmio1ServiciosLogic {
 		assertNotNull("No existen servicios en este rango de fechas", servicios);
 		assertEquals(1, servicios.size());
 		assertEquals("1143874290", servicios.get(0).getTmio1Conductore().getCedula());
+		eliminarDatos(b, tmioConductor, s1, ruta);
 	}
 	
 	@Test
