@@ -37,9 +37,7 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 						validacionFechaNacimiento(conductor.getFechaNacimiento()) &&
 							validacionFechaContratacion(conductor.getFechaContratacion())) {
 				conductorDAO.save(em,conductor);
-		}else {
-			//LANZAR UNA EXCEPCION
-		}	
+		}
 	}
 	
 	@Transactional
@@ -53,8 +51,6 @@ public class TmioConductoresLogic implements ITmioConductoresLogic{
 							validacionFechaContratacion(conductor.getFechaContratacion())) {
 				conductorDAO.update(em, conductor);
 
-		}else {
-			//LANZAR UNA EXCEPCION
 		}
 	}
 

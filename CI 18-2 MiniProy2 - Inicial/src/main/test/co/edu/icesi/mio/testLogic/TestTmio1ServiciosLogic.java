@@ -78,7 +78,7 @@ public class TestTmio1ServiciosLogic {
 
 		Tmio1Ruta ruta = new Tmio1Ruta();
 		ruta.setActiva("S");
-		ruta.setDescripcion("Ruta Ca�asgordas");
+		ruta.setDescripcion("Ruta Canasgordas");
 		ruta.setDiaInicio(new BigDecimal(1));
 		ruta.setDiaFin(new BigDecimal(6));
 		ruta.setHoraInicio(new BigDecimal(6));
@@ -167,7 +167,7 @@ public class TestTmio1ServiciosLogic {
 		
 		Tmio1Ruta ruta= new Tmio1Ruta();
 		ruta.setActiva("S");
-		ruta.setDescripcion("Ruta Ca�asgordas");
+		ruta.setDescripcion("Ruta Canasgordas");
 		ruta.setDiaInicio(new BigDecimal(1));
 		ruta.setDiaFin(new BigDecimal(6));
 		ruta.setHoraInicio(new BigDecimal(6));
@@ -209,12 +209,12 @@ public class TestTmio1ServiciosLogic {
 		b.setCapacidad(new BigDecimal(110));
 		b.setMarca("Volvo");
 		b.setModelo(new BigDecimal(2010));
-		b.setPlaca("EVN876");
+		b.setPlaca("EVN879");
 		b.setTipo("T");
 		busesLogic.add(b);
 		
 		Tmio1Conductore tmioConductor = new Tmio1Conductore();
-    	tmioConductor.setCedula("1143874318");
+    	tmioConductor.setCedula("1143874319");
 		tmioConductor.setNombre("Johnatan");
 		tmioConductor.setApellidos("Garzon");
 		Calendar d = new GregorianCalendar(2018,1,20);
@@ -227,9 +227,9 @@ public class TestTmio1ServiciosLogic {
 		
 		Tmio1Ruta ruta= new Tmio1Ruta();
 		ruta.setActiva("S");
-		ruta.setDescripcion("Ruta Ca�asgordas");
+		ruta.setDescripcion("Ruta Canasgordas");
 		ruta.setDiaInicio(new BigDecimal(1));
-		ruta.setDiaFin(new BigDecimal(6));
+		ruta.setDiaFin(new BigDecimal(7));
 		ruta.setHoraInicio(new BigDecimal(6));
 		ruta.setHoraFin(new BigDecimal(17));
 		ruta.setNumero("A11");
@@ -244,7 +244,7 @@ public class TestTmio1ServiciosLogic {
 		s1PK.setIdRuta(ruta.getId());
 		Calendar d2 = new GregorianCalendar(2018,1,20);
 		s1PK.setFechaInicio(d2.getTime());
-		Calendar d3 = new GregorianCalendar(2018,11,25);
+		Calendar d3 = new GregorianCalendar(2018,10,25);
 		s1PK.setFechaFin(d3.getTime());
 		
 		Tmio1Servicio s1= new Tmio1Servicio();
@@ -258,25 +258,25 @@ public class TestTmio1ServiciosLogic {
 		
 		
 		Tmio1Ruta ruta2= new Tmio1Ruta();
-		ruta.setActiva("S");
-		ruta.setDescripcion("Ruta Ca�asgordas");
-		ruta.setDiaInicio(new BigDecimal(1));
-		ruta.setDiaFin(new BigDecimal(5));
-		ruta.setHoraInicio(new BigDecimal(7));
-		ruta.setHoraFin(new BigDecimal(14));
-		ruta.setNumero("A11");
-    	ruta.setTmio1Servicios(new ArrayList<Tmio1Servicio>());
-    	ruta.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());
-    	ruta.setTmio1SitiosRutas1(new ArrayList<Tmio1SitiosRuta>());
-    	rutasLogic.add(ruta);
+		ruta2.setActiva("S");
+		ruta2.setDescripcion("Ruta Canasgordas");
+		ruta2.setDiaInicio(new BigDecimal(3));
+		ruta2.setDiaFin(new BigDecimal(4));
+		ruta2.setHoraInicio(new BigDecimal(7));
+		ruta2.setHoraFin(new BigDecimal(14));
+		ruta2.setNumero("A11");
+		ruta2.setTmio1Servicios(new ArrayList<Tmio1Servicio>());
+		ruta2.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());
+		ruta2.setTmio1SitiosRutas1(new ArrayList<Tmio1SitiosRuta>());
+    	rutasLogic.add(ruta2);
     	
 		Tmio1ServicioPK s2PK = new Tmio1ServicioPK();
 		s2PK.setCedulaConductor(tmioConductor.getCedula());
 		s2PK.setIdBus(b.getId());
 		s2PK.setIdRuta(ruta2.getId());
-		Calendar d4 = new GregorianCalendar(2018,3,20);
+		Calendar d4 = new GregorianCalendar(2018,2,20);
 		s2PK.setFechaInicio(d4.getTime());
-		Calendar d5 = new GregorianCalendar(2018,10,25);
+		Calendar d5 = new GregorianCalendar(2018,5,25);
 		s2PK.setFechaFin(d5.getTime());
 		
 		Tmio1Servicio s2= new Tmio1Servicio();
@@ -318,7 +318,7 @@ public class TestTmio1ServiciosLogic {
 		
 		Tmio1Ruta ruta= new Tmio1Ruta();
 		ruta.setActiva("S");
-		ruta.setDescripcion("Ruta Ca�asgordas");
+		ruta.setDescripcion("Ruta Canasgordas");
 		ruta.setDiaInicio(new BigDecimal(1));
 		ruta.setDiaFin(new BigDecimal(7));
 		ruta.setHoraInicio(new BigDecimal(6));
@@ -347,24 +347,15 @@ public class TestTmio1ServiciosLogic {
 		serviciosLogic.createServicio(s1);
 		assertNotNull(serviciosLogic.getServicio(s1PK));
 		
-		Tmio1Servicio servicio=serviciosLogic.getServicio(s1PK);
-		Tmio1Conductore tmioConductor2 = new Tmio1Conductore();
-		tmioConductor2.setCedula("1143874289");
-		tmioConductor2.setNombre("Camilo");
-		tmioConductor2.setApellidos("Perez");
-		Calendar d4 = new GregorianCalendar(2018,1,20);
-		tmioConductor2.setFechaContratacion(d4.getTime());
-		Calendar d5 = new GregorianCalendar(1988,1,18);
-		tmioConductor2.setFechaNacimiento(d5.getTime());
-		tmioConductor2.setTmio1Servicios(new ArrayList<Tmio1Servicio>());
-		tmioConductor2.setTmio1ServiciosSitios(new ArrayList<Tmio1ServiciosSitio>());		
-		conductoresLogic.createConductor(tmioConductor2);
-	
-		servicio.setTmio1Conductore(tmioConductor2);
-		serviciosLogic.updateServicio(servicio);
-		assertEquals("1143874289", serviciosLogic.getServicio(servicio.getId()).getTmio1Conductore().getCedula());
+		s1PK.setFechaInicio(new GregorianCalendar(2018,3,22).getTime());
 		
-		eliminarDatos2(b, tmioConductor, servicio, ruta);
+
+		serviciosLogic.updateServicio(s1);
+		Calendar nuevo= new GregorianCalendar();
+		nuevo.setTime(s1PK.getFechaInicio());
+		assertEquals(22, nuevo.get(Calendar.DAY_OF_MONTH));
+		
+		eliminarDatos2(b, tmioConductor, s1, ruta);
 	}
 	
 	@Test
@@ -396,7 +387,7 @@ public class TestTmio1ServiciosLogic {
 		
 		Tmio1Ruta ruta= new Tmio1Ruta();
 		ruta.setActiva("S");
-		ruta.setDescripcion("Ruta Ca�asgordas");
+		ruta.setDescripcion("Ruta Canasgordas");
 		ruta.setDiaInicio(new BigDecimal(5));
 		ruta.setDiaFin(new BigDecimal(7));
 		ruta.setHoraInicio(new BigDecimal(6));
@@ -426,7 +417,7 @@ public class TestTmio1ServiciosLogic {
 		assertNotNull(serviciosLogic.getServicio(s1PK));
 		
 		Calendar d4 = new GregorianCalendar(2018,5,1);
-		Calendar d5 = new GregorianCalendar(2018,8,28);
+		Calendar d5 = new GregorianCalendar(2018,9,28);
 		List<Tmio1Servicio> servicios = serviciosLogic.findByRangeOfDates(d4, d5);
 		assertNotNull("No existen servicios en este rango de fechas", servicios);
 		assertEquals(1, servicios.size());
@@ -463,7 +454,7 @@ public class TestTmio1ServiciosLogic {
 		
 		Tmio1Ruta ruta= new Tmio1Ruta();
 		ruta.setActiva("S");
-		ruta.setDescripcion("Ruta Ca�asgordas");
+		ruta.setDescripcion("Ruta Canasgordas");
 		ruta.setDiaInicio(new BigDecimal(5));
 		ruta.setDiaFin(new BigDecimal(7));
 		ruta.setHoraInicio(new BigDecimal(6));
