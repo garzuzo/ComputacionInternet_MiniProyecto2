@@ -22,7 +22,7 @@ public class TmioRutasLogic implements ITmioRutasLogic {
 	@Override
 	public void add(Tmio1Ruta ruta) {
 
-		if (ruta != null && rutas.findById(em, ruta.getId()) == null && validacionNumeroRuta(ruta)
+		if (ruta != null && validacionNumeroRuta(ruta)
 				&& validacionDiaInicio(ruta) && validacionDiaFin(ruta) && validacionDiaInicioMenorFin(ruta)
 				&& validacionHoraFin(ruta) && validacionHoraInicio(ruta) && validacionHoraInicioMenorFin(ruta)
 				&& validacionActiva(ruta))

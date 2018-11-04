@@ -23,11 +23,14 @@ public class TmioBusesLogic implements ITmioBusesLogic {
 	private EntityManager em;
 
 	@Transactional
-	public void add(Tmio1Bus bus) {
+	public boolean add(Tmio1Bus bus) {
 
-		if (bus != null && placaMESix(bus) && marcaMEThree(bus)
-				&& modeloNumbersEFour(bus.getModelo()) && tipoPAT(bus.getTipo()) && capacidadMZero(bus.getCapacidad()))
+		if (bus != null && placaMESix(bus) && marcaMEThree(bus) && modeloNumbersEFour(bus.getModelo())
+				&& tipoPAT(bus.getTipo()) && capacidadMZero(bus.getCapacidad())) {
 			buses.save(em, bus);
+			return true;
+		}else
+			return false;
 	}
 
 	@Transactional
@@ -41,7 +44,7 @@ public class TmioBusesLogic implements ITmioBusesLogic {
 	public void delete(Tmio1Bus bus) {
 
 		if (bus != null && buses.findById(em, bus.getId()) != null)
-			buses.delete(em, bus);
+			buses.delete(em, findById(bus.getId()));
 	}
 
 	@Transactional
@@ -49,27 +52,31 @@ public class TmioBusesLogic implements ITmioBusesLogic {
 
 		if (modeloNumbersEFour(m))
 			return buses.findByModel(em, m);
-		else return null;
+		else
+			return null;
 	}
 
 	@Transactional
 	public List<Tmio1Bus> findByTipo(String t) {
 		if (tipoPAT(t))
 			return buses.findByType(em, t);
-		else return null;
+		else
+			return null;
 	}
 
 	@Transactional
 	public List<Tmio1Bus> findByCapacidad(BigDecimal c) {
 		if (capacidadMZero(c))
 			return buses.findByCapacity(em, c);
-		else return null;
+		else
+			return null;
 	}
 
 	@Transactional
 	public Tmio1Bus findById(int id) {
 		return buses.findById(em, id);
 	}
+
 	/**
 	 * VALIDACIONES
 	 */
